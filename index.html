@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="description" content="Interactive Periodic Table - Click elements for detailed information">
     <meta name="theme-color" content="#667eea">
     <title>Interactive Periodic Table</title>
@@ -14,13 +14,15 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
+            padding: 10px;
             min-height: 100vh;
+            touch-action: pan-y;
         }
 
         .install-prompt {
@@ -34,6 +36,7 @@
             display: none;
             z-index: 1000;
             animation: slideUp 0.3s ease;
+            max-width: calc(100vw - 40px);
         }
 
         .install-prompt.show {
@@ -82,11 +85,11 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 100%;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: 15px;
+            padding: 15px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
@@ -95,11 +98,14 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         h1 {
             color: #333;
-            font-size: 2.5em;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            flex: 1;
         }
 
         .offline-indicator {
@@ -107,7 +113,7 @@
             color: white;
             padding: 5px 15px;
             border-radius: 20px;
-            font-size: 0.9em;
+            font-size: 0.85em;
             display: none;
         }
 
@@ -120,23 +126,23 @@
             color: white;
             padding: 5px 15px;
             border-radius: 20px;
-            font-size: 0.9em;
+            font-size: 0.85em;
         }
 
         .subtitle {
             text-align: center;
             color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
+            margin-bottom: 20px;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
         }
 
         .legend {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            padding: 15px;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 12px;
             background: #f8f9fa;
             border-radius: 10px;
         }
@@ -144,70 +150,74 @@
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.9em;
+            gap: 6px;
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
         }
 
         .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
             border: 2px solid #ddd;
+            flex-shrink: 0;
         }
 
         .periodic-table {
             display: grid;
             grid-template-columns: repeat(18, 1fr);
-            gap: 4px;
-            margin-bottom: 30px;
+            gap: 2px;
+            margin-bottom: 20px;
+            width: 100%;
+            font-size: clamp(0.4rem, 1.8vw, 0.75rem);
         }
 
         .element {
             aspect-ratio: 1;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 6px;
+            border: 1.5px solid #ddd;
+            border-radius: 6px;
+            padding: clamp(2px, 0.5vw, 6px);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
             position: relative;
-            font-size: 0.75em;
-        }
-
-        .element:hover {
-            transform: scale(1.15);
-            z-index: 10;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            border-color: #333;
+            min-width: 0;
+            user-select: none;
         }
 
         .element:active {
-            transform: scale(1.05);
+            transform: scale(0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border-color: #333;
         }
 
         .element .atomic-number {
-            font-size: 0.8em;
+            font-size: 0.75em;
             font-weight: bold;
             color: #333;
         }
 
         .element .symbol {
-            font-size: 1.8em;
+            font-size: clamp(1.2em, 2.5vw, 1.8em);
             font-weight: bold;
             color: #000;
+            line-height: 1;
         }
 
         .element .name {
-            font-size: 0.7em;
+            font-size: 0.65em;
             color: #555;
             text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
         }
 
         .element .mass {
-            font-size: 0.65em;
+            font-size: 0.6em;
             color: #777;
         }
 
@@ -217,7 +227,7 @@
             cursor: default;
         }
 
-        .empty:hover {
+        .empty:active {
             transform: none;
             box-shadow: none;
         }
@@ -237,7 +247,7 @@
         .info-panel {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 30px;
+            padding: 20px;
             border-radius: 15px;
             margin-top: 20px;
             min-height: 200px;
@@ -261,32 +271,32 @@
         }
 
         .info-panel h2 {
-            font-size: 2.5em;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
             margin-bottom: 10px;
         }
 
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
             margin-top: 20px;
         }
 
         .info-item {
             background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
+            padding: 12px;
             border-radius: 10px;
             backdrop-filter: blur(10px);
         }
 
         .info-item h3 {
-            font-size: 0.9em;
+            font-size: 0.85em;
             opacity: 0.8;
             margin-bottom: 5px;
         }
 
         .info-item p {
-            font-size: 1.2em;
+            font-size: 1.1em;
             font-weight: bold;
         }
 
@@ -296,8 +306,8 @@
             left: 20px;
             background: white;
             border: none;
-            width: 60px;
-            height: 60px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             cursor: pointer;
@@ -309,37 +319,111 @@
             transition: transform 0.2s;
         }
 
-        .share-button:hover {
-            transform: scale(1.1);
-        }
-
         .share-button:active {
-            transform: scale(0.95);
+            transform: scale(0.9);
         }
 
-        @media (max-width: 1200px) {
-            .periodic-table {
-                font-size: 0.8em;
+        /* Desktop hover effects */
+        @media (hover: hover) {
+            .element:hover {
+                transform: scale(1.15);
+                z-index: 10;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+                border-color: #333;
+            }
+
+            .share-button:hover {
+                transform: scale(1.1);
             }
         }
 
-        @media (max-width: 768px) {
-            .periodic-table {
-                font-size: 0.6em;
-                gap: 2px;
+        /* Tablet optimizations */
+        @media (min-width: 768px) {
+            .container {
+                padding: 20px;
             }
-            
-            h1 {
-                font-size: 1.8em;
+
+            .periodic-table {
+                gap: 3px;
+                font-size: 0.65em;
+            }
+
+            .info-grid {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            }
+        }
+
+        /* Desktop optimizations */
+        @media (min-width: 1024px) {
+            body {
+                padding: 20px;
             }
 
             .container {
+                max-width: 1400px;
+                padding: 30px;
+                border-radius: 20px;
+            }
+
+            .periodic-table {
+                gap: 4px;
+                font-size: 0.7em;
+            }
+
+            .legend {
+                gap: 15px;
                 padding: 15px;
             }
 
+            .info-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+            }
+
+            .info-panel {
+                padding: 30px;
+            }
+        }
+
+        /* Large screens */
+        @media (min-width: 1400px) {
+            .periodic-table {
+                font-size: 0.75em;
+            }
+        }
+
+        /* Landscape phone optimization */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .periodic-table {
+                font-size: 0.55em;
+            }
+
             header {
-                flex-direction: column;
-                gap: 10px;
+                margin-bottom: 5px;
+            }
+
+            .subtitle {
+                margin-bottom: 10px;
+            }
+
+            .legend {
+                margin-bottom: 10px;
+                padding: 8px;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 375px) {
+            .periodic-table {
+                gap: 1px;
+            }
+
+            .element {
+                border-width: 1px;
+            }
+
+            .container {
+                padding: 10px;
             }
         }
     </style>
@@ -350,7 +434,7 @@
             <h1>Interactive Periodic Table</h1>
             <div class="online-indicator" id="connectionStatus">Online</div>
         </header>
-        <p class="subtitle">Click on any element to see detailed information</p>
+        <p class="subtitle">Tap any element for details</p>
 
         <div class="legend">
             <div class="legend-item">
@@ -403,10 +487,10 @@
         </div>
     </div>
 
-    <button class="share-button" id="shareButton" title="Share">📤</button>
+    <button class="share-button" id="shareButton" title="Share" aria-label="Share">📤</button>
 
     <div class="install-prompt" id="installPrompt">
-        <button class="close" onclick="document.getElementById('installPrompt').classList.remove('show')">×</button>
+        <button class="close" onclick="document.getElementById('installPrompt').classList.remove('show')" aria-label="Close">×</button>
         <p><strong>Install Periodic Table</strong></p>
         <p style="font-size: 0.9em; margin-top: 5px;">Access offline and add to home screen</p>
         <button id="installButton">Install App</button>
