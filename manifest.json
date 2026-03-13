@@ -2,7 +2,7 @@
   "name": "Interactive Periodic Table",
   "short_name": "Periodic Table",
   "description": "Explore chemistry with an interactive periodic table. Click elements for detailed information including atomic mass, electron configuration, and more.",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#667eea",
   "theme_color": "#667eea",
